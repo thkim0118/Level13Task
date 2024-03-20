@@ -6,5 +6,5 @@ import retrofit2.http.GET
 
 interface PhotoApi {
     @GET("list")
-    suspend fun getPhotos(): Response<PhotoResponse>
+    suspend fun getPhotos(): Response<List<PhotoResponse>>
 }

@@ -15,7 +15,7 @@ class PhotoRepositoryImpl @Inject constructor(
 
             return if (response.isSuccessful) {
                 Result.success(
-                    response.body()?.photos?.map {
+                    response.body()?.map {
                         PhotoVo(
                             it.author,
                             it.downloadUrl,
