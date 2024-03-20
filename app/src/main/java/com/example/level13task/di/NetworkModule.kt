@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     private const val connectionTime = 30_000L
-    private const val baseUrl = "http://picsum.photos/v2"
+    private const val baseUrl = "https://picsum.photos/v2/"
 
     @Provides
     fun provideOkHttpClient(): OkHttpClient =
