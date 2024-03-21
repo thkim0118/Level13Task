@@ -1,5 +1,6 @@
 package com.example.level13task.presentation.main
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.level13task.domain.usecase.GetPhotosUseCase
@@ -22,8 +23,12 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getPhotosUseCase.invoke().onSuccess {
-                _uiState.value = MainUiState(it.map { photoVo -> PhotoUiModel.of(photoVo) })
+            getPhotosUseCase.invoke().onSuccess { photoVos ->
+                _uiState.update {
+                    MainUiState(photoVos.map { photoVo -> PhotoUiModel.of(photoVo) })
+                }
+            }.onFailure {
+                Log.e("MainViewModel", "Failed to get photos", it)
             }
         }
     }
@@ -32,11 +37,17 @@ class MainViewModel @Inject constructor(
         _uiState.update { currentState ->
             val updatedPhotos = currentState.photos.toMutableList().apply {
                 this.getOrNull(index)?.let { photoUiModel ->
-                    this[index] = photoUiModel.copy(isCheck = isCheck)
+                    this[index] = photoUiModel.copy(isChecked = isCheck)
                 }
             }
 
             currentState.copy(photos = updatedPhotos)
+        }
+    }
+
+    fun getPhoto(index: Int): PhotoUiModel? {
+        return _uiState.value.photos.getOrNull(index)?.let { photo ->
+            return photo
         }
     }
 }
